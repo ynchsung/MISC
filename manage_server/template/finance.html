@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ static_url("css/finance.css") }}" />
+{% end %}
+
+{% block content %}
+    {% if not status is None %}
+    {% if status %}
+    <div class="alert alert-success alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!!!</strong>
+    </div>
+    {% else %}
+    <div class="alert alert-danger alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Fail!!!</strong>
+    </div>
+    {% end %}
+    {% end %}
+    <div class="container" style="padding:40px;">
+        <div class="container" style="background-color:lavender;">
+            <h2 class="text-primary">Finance Record</h2>
+            <ul>
+                <li>
+                    <h3>Add Record</h3>
+                    <blockquote>
+                        <form method="POST" action="/finance">
+                            Type:
+                            <select class="form-control" name="type" style="width:150px;">
+                                <option>cash</option>
+                                <option>credit-card</option>
+                                <option>check</option>
+                            </select>
+                            <br />
+                            Date: <input type="text" name="date" style="width:150px;"/>
+                            Amount: <input type="text" name="amount" style="width:100px;"/>
+                            Remark: <input type="text" name="remark" style="width:300px;"/>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </blockquote>
+                </li>
+                <li>
+                    <h3>View Record</h3>
+                    <blockquote>
+                        <form method="GET" action="/finance">
+                            Date Start: <input type="text" name="start" />
+                            End: <input type="text" name="end" />
+                            <button type="submit">View</button>
+                        </form>
+                    </blockquote>
+                    <table style="width:95%; margin-bottom:60px;">
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                            <th>Remark</th>
+                        </tr>
+                        {% for x in data %}
+                        <tr>
+                            <td>{{ escape(x['date']) }}</td>
+                            <td>{{ escape(str(x['amount'])) }}</td>
+                            <td>{{ escape(str(x['type'])) }}</td>
+                            <td>{{ escape(x['remark']) }}</td>
+                        </tr>
+                        {% end %}
+                    </table>
+                    <h4>Total: {{ escape(str(total)) }} SGD</h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% end %}
